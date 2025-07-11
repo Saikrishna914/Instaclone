@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import connectDB from './utils/db.js';
+import userRoute from "./routes/user.route.js";
 
 const PORT = process.env.PORT || 8000;
 
@@ -18,6 +19,11 @@ app.use(cors ({
     origin:'http://localhost:5173',
     credentials:true
 }))
+
+
+// yaha parb apni api ayegi
+
+app.use('/api/v1/user',userRoute);
 
 app.get('/',(req,res)=>{
     return res.status(200).json({
