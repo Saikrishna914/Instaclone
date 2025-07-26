@@ -18,7 +18,7 @@ const Post = ({ post }) => {
     const { posts } = useSelector(store => store.post); 
     const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
     const [postLike, setPostLike] = useState(post.likes.length);
-    // const [comment, setComment] = useState(post.comments);
+    const [comment, setComment] = useState(post.comments);
     const dispatch = useDispatch();
 
     const changeEventHandler = (e) => {
@@ -34,7 +34,7 @@ const Post = ({ post }) => {
         try {
             const action = liked ? 'dislike' : 'like';
             const res = await axios.get(`http://localhost:8000/api/v1/post/${post._id}/${action}`, { withCredentials: true });
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data.success) {
                 const updatedLikes = liked ? postLike - 1 : postLike + 1;
                 setPostLike(updatedLikes);
@@ -55,32 +55,31 @@ const Post = ({ post }) => {
         }
     }
 
-    // const commentHandler = async () => {
+    const commentHandler = async () => {
 
-    //     try {
-    //         const res = await axios.post(`https://instaclone-g9h5.onrender.com/api/v1/post/${post._id}/comment`, { text }, {
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             withCredentials: true
-    //         });
-    //         console.log(res.data);
-    //         if (res.data.success) {
-    //             const updatedCommentData = [...comment, res.data.comment];
-    //             setComment(updatedCommentData);
+        try {
+            const res = await axios.post(`http://localhost:8000/api/v1/post/${post._id}/comment`, { text }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+            console.log(res.data);
+            if (res.data.success) {
+                const updatedCommentData = [...comment, res.data.comment];
+                setComment(updatedCommentData);
 
-    //             const updatedPostData = posts.map(p =>
-    //                 p._id === post._id ? { ...p, comments: updatedCommentData } : p
-    //             );
-
-    //             dispatch(setPosts(updatedPostData));
-    //             toast.success(res.data.message);
-    //             setText("");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+                const updatedPostData = posts.map(p =>
+                    p._id === post._id ? { ...p, comments: updatedCommentData } : p
+                );
+                dispatch(setPosts(updatedPostData));
+                toast.success(res.data.message);
+                setText("");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const deletePostHandler = async () => {
         try {
@@ -116,7 +115,7 @@ const Post = ({ post }) => {
                     </Avatar>
                     <div className='flex items-center gap-3'>
                         <h1>{post.author?.username}</h1>
-                       {/* {user?._id === post.author._id &&  <Badge variant="secondary">Author</Badge>} */}
+                       {user?._id === post.author._id &&  <Badge variant="secondary">Author</Badge>}
                     </div>
                 </div>
                 <Dialog>
@@ -155,17 +154,17 @@ const Post = ({ post }) => {
                 </div>
                 <Bookmark  className='cursor-pointer hover:text-gray-600' />
             </div>
-            <span className='font-medium block mb-2'>{post.likes.length}</span>
+            <span className='font-medium block mb-2'>{postLike} likes</span>
             <p>
                 <span className='font-medium mr-2'>{post.author?.username}</span>
                 {post.caption}
             </p>
             {
-                 (
+                comment.length>0 && (
                     <span onClick={() => {
                         dispatch(setSelectedPost(post));
                         setOpen(true);
-                    }} className='cursor-pointer text-sm text-gray-400'>View all 10 comments</span>
+                    }} className='cursor-pointer text-sm text-gray-400'>View all {comment.length} comments</span>
                 )
             }
             <CommentDialog open={open} setOpen={setOpen} />
