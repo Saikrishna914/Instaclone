@@ -9,6 +9,7 @@ import { Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { setAuthUser } from '@/redux/authSlice';
+import HOST from '@/utils/HOST';
 
 const EditProfile = () => {
     const imageRef = useRef();
@@ -42,7 +43,7 @@ const EditProfile = () => {
         }
         try {
             setLoading(true);
-            const res = await axios.post('https://instaclone-g9h5.onrender.com/api/v1/user/profile/edit', formData,{
+            const res = await axios.post(`${HOST}/api/v1/user/profile/edit`, formData,{
                 headers:{
                     'Content-Type':'multipart/form-data'
                 },

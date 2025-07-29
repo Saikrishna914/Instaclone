@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPosts } from '@/redux/postSlice';
+import HOST from '@/utils/HOST';
 
 const CreatePost = ({ open, setOpen }) => {
 	const imageRef = useRef();
@@ -35,7 +36,7 @@ const CreatePost = ({ open, setOpen }) => {
 		if (imagePreview) formData.append("image", file);
 		try {
 			setLoading(true);
-			const res = await axios.post('http://localhost:8000/api/v1/post/addpost', formData, {
+			const res = await axios.post(`${HOST}/api/v1/post/addpost`, formData, {
 				headers: {
 				'Content-Type': 'multipart/form-data'
 				},

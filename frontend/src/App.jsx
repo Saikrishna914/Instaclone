@@ -13,6 +13,7 @@ import { setSocket } from './redux/socketSlice'
 import { setOnlineUsers } from './redux/chatSlice'
 import { setLikeNotification } from './redux/rtnSlice'
 import ProtectedRoutes from './components/ProtectedRoutes'
+import HOST from './utils/HOST'
 
 
 const browserRouter = createBrowserRouter([
@@ -56,7 +57,7 @@ function App() {
 
 	useEffect(()=>{
 		if(user){
-			const socketio = io('http://localhost:8000',{
+			const socketio = io(`${HOST}`,{
 				query:{
 					userId:user?._id,
 				},

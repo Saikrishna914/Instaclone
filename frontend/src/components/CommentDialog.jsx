@@ -9,6 +9,7 @@ import Comment from './Comment'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { setPosts } from '@/redux/postSlice.js'
+import HOST from '@/utils/HOST'
 
 const CommentDialog = ({ open, setOpen }) => {
 	const [text, setText] = useState("");
@@ -35,7 +36,7 @@ const CommentDialog = ({ open, setOpen }) => {
 	const sendMessageHandler = async () => {
 
 		try {
-			const res = await axios.post(`http://localhost:8000/api/v1/post/${selectedPost?._id}/comment`, { text }, {
+			const res = await axios.post(`${HOST}/api/v1/post/${selectedPost?._id}/comment`, { text }, {
 				headers: {
 				'Content-Type': 'application/json'
 				},
