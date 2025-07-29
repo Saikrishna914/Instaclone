@@ -12,7 +12,7 @@ const SuggestedUsers = () => {
                 <span className='font-medium cursor-pointer'>See All</span>
             </div>
             {
-                suggestedUsers?.map((user) => {
+                suggestedUsers.map((user) => {
                     return (
                         <div key={user._id} className='flex items-center justify-between my-5'>
                             <div className='flex items-center gap-2'>
@@ -24,7 +24,7 @@ const SuggestedUsers = () => {
                                 </Link>
                                 <div>
                                     <h1 className='font-semibold text-sm'><Link to={`/profile/${user?._id}`}>{user?.username}</Link></h1>
-                                    <span className='text-gray-600 text-sm'>{user?.bio || 'Bio here...'}</span>
+                                    <span className='text-gray-600 text-sm truncate max-w-[200px] block'>{user?.bio || 'Bio here...'}</span>
                                 </div>
                             </div>
                             <span className='text-[#3BADF8] text-xs font-bold cursor-pointer hover:text-[#3495d6]'>Follow</span>
