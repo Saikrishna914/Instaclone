@@ -28,7 +28,7 @@ export const register = async (req, res) => {
 			password: hashedPassword,
 		});
 		return res.status(201).json({
-			message: "Accounrt created succesfully",
+			message: "Account created succesfully",
 			success: true,
 		});
 	} catch (error) {
@@ -118,7 +118,12 @@ export const logout = async (req, res) => {
 export const getProfile = async (req, res) => {
 	try {
 		const userId = req.params.id;
-		let user = await User.findById(userId).select('-password');
+		let user = await User.findById(userId).populate({
+			path:'posts',
+			createdAt:-1
+		}).populate('bookmarks');
+
+		
 		if (!user) {
 			return res.status(404).json({
 				message: "User not found",
