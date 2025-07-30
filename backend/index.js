@@ -11,7 +11,7 @@ import path from 'path';
 
 const PORT = process.env.PORT || 8000;
 
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 
 dotenv.config({});
 
@@ -20,12 +20,12 @@ app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 
 app.use(cors ({
-    origin:'http://localhost:5173',
+    origin:process.env.FRONTEND_URI,
     credentials:true
 }))
 
 
-// yaha parb apni api ayegi
+// yaha par apni api ayegi
 
 app.use('/api/v1/user',userRoute);
 
@@ -33,11 +33,11 @@ app.use('/api/v1/post',postRoute);
 
 app.use('/api/v1/message',messageRoute);
 
-app.use(express.static(path.join(__dirname,"/frontend/dist")));
+// app.use(express.static(path.join(__dirname,"/frontend/dist")));
 
-app.get('*',(req,res)=>{
-    res.sendFile(path.resolve(__dirname,"frontend","dist","index.html"));
-})
+// app.get('*',(req,res)=>{
+//     res.sendFile(path.resolve(__dirname,"frontend","dist","index.html"));
+// })
 
 app.get('/',(req,res)=>{
     return res.status(200).json({
