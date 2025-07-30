@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Feed from './Feed'
-import RightSideBar from './RightSideBar'
+import RightSidebar from './RightSidebar'
 import useGetAllPost from '@/hooks/useGetAllPost'
 import useGetSuggestedUsers from '@/hooks/useGetSuggestedUsers'
 
@@ -14,7 +14,7 @@ const Home = () => {
                 <Feed />
                 <Outlet />
             </div>
-            <RightSideBar />
+            <RightSidebar />
         </div>
     )
 }
