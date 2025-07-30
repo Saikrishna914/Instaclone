@@ -23,19 +23,19 @@ const browserRouter = createBrowserRouter([
 		children:[
 			{
 				path:'/',
-				element:<ProtectedRoutes><Home/></ProtectedRoutes>,
+				element:<Home/>,
 			},
 			{
 				path:'/profile/:id',
-				element:<ProtectedRoutes><Profile/></ProtectedRoutes>,
+				element:<Profile/>,
 			},
 			{
 				path:'/account/edit',
-				element:<ProtectedRoutes><EditProfile/></ProtectedRoutes>,
+				element:<EditProfile/>,
 			},
 			{
 				path:'/chat',
-				element:<ProtectedRoutes><ChatPage/></ProtectedRoutes>,
+				element:<ChatPage/>,
 			}
 		]
 	},
