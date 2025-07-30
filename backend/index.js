@@ -9,11 +9,13 @@ import messageRoute from "./routes/message.route.js"
 import {app , server} from './socket/socket.js';
 import path from 'path';
 
+dotenv.config({});
+
 const PORT = process.env.PORT || 8000;
 
 // const __dirname = path.resolve();
 
-dotenv.config({});
+// dotenv.config({});
 
 app.use(express.json());
 app.use(cookieParser());
