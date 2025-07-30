@@ -4,6 +4,7 @@ import Feed from './Feed'
 import RightSideBar from './RightSideBar'
 import useGetAllPost from '@/hooks/useGetAllPost'
 import useGetSuggestedUsers from '@/hooks/useGetSuggestedUsers'
+import RightSideBar from './RightSideBar'
 
 const Home = () => {
     useGetAllPost();
