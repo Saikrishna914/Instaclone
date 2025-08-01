@@ -69,7 +69,7 @@ export const login = async (req, res) => {
 		const populatedPosts = await Promise.all(
 			user.posts.map(async (postId) => {
 				const post = await Post.findById(postId);
-				if(post.author.equals(user._id)){
+				if (post.author.equals(user._id)) {
 					return post;
 				}
 				return null;
@@ -87,11 +87,11 @@ export const login = async (req, res) => {
 			posts: populatedPosts,
 		};
 
-		return res
-			.cookie("token", token, {
+		return res.cookie("token", token, {
 				httpOnly: true,
-				sameSite: "strict",
-				maxAge: 1 * 24 * 60 * 60 * 1000,
+				secure: process.env.NODE_ENV === "production", // HTTPS only in production
+				sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+				maxAge: 24 * 60 * 60 * 1000, // 1 day
 			})
 			.json({
 				message: `Welcome back ${user.username}`,
@@ -119,11 +119,11 @@ export const getProfile = async (req, res) => {
 	try {
 		const userId = req.params.id;
 		let user = await User.findById(userId).populate({
-			path:'posts',
-			createdAt:-1
+			path: 'posts',
+			createdAt: -1
 		}).populate('bookmarks');
 
-		
+
 		if (!user) {
 			return res.status(404).json({
 				message: "User not found",
@@ -132,7 +132,7 @@ export const getProfile = async (req, res) => {
 		}
 		return res.status(200).json({
 			user,
-			success: true, 
+			success: true,
 		});
 	} catch (error) {
 		console.log(error);
@@ -141,41 +141,41 @@ export const getProfile = async (req, res) => {
 
 export const editProfile = async (req, res) => {
 	try {
-		const userId=req.id;
-		const {bio,gender} = req.body;
+		const userId = req.id;
+		const { bio, gender } = req.body;
 		const profilePicture = req.file;
 		let cloudResponse;
-		if(profilePicture){
+		if (profilePicture) {
 			const fileUri = getDataUri(profilePicture);
-			cloudResponse = await cloudinary.uploader.upload(fileUri); 
+			cloudResponse = await cloudinary.uploader.upload(fileUri);
 		}
 
-		const user = await User.findById(userId).select("-password"); 
-		if(!user){
+		const user = await User.findById(userId).select("-password");
+		if (!user) {
 			return res.status(404).json({
-				message:'User not found',
-				success:false
+				message: 'User not found',
+				success: false
 			})
 		}
 
-		if(bio ){
+		if (bio) {
 			user.bio = bio;
 		}
-		if(gender){
-			user.gender=gender;
+		if (gender) {
+			user.gender = gender;
 		}
-		if(profilePicture){
+		if (profilePicture) {
 			user.profilePicture = cloudResponse.secure_url;
 		}
 
 		await user.save();
 
 		return res.status(200).json({
-			message:'Profile Updated',
-			success:true,
+			message: 'Profile Updated',
+			success: true,
 			user
 		})
-	} 
+	}
 	catch (error) {
 		console.log(error);
 	}
@@ -183,18 +183,18 @@ export const editProfile = async (req, res) => {
 
 export const getSuggestedUsers = async (req, res) => {
 	try {
-		const suggestedUsers = await User.find({_id:{$ne:req.id}}).select("-password");
-		if(!suggestedUsers){
+		const suggestedUsers = await User.find({ _id: { $ne: req.id } }).select("-password");
+		if (!suggestedUsers) {
 			return res.status(400).json({
-				message:'Currently do not have any users',
-				success:false
+				message: 'Currently do not have any users',
+				success: false
 			})
 		}
 		return res.status(200).json({
-			success:true,
-			users:suggestedUsers
+			success: true,
+			users: suggestedUsers
 		})
-	} 
+	}
 	catch (error) {
 		console.log(error);
 	}
@@ -204,47 +204,47 @@ export const getSuggestedUsers = async (req, res) => {
 export const followOrUnfollow = async (req, res) => {
 	try {
 		const personWhoWantsToFollow = req.id;
-		const ToBeFollowed = req.params.id; 
-		if(personWhoWantsToFollow===ToBeFollowed){
+		const ToBeFollowed = req.params.id;
+		if (personWhoWantsToFollow === ToBeFollowed) {
 			return res.status(400).json({
-				message:"You can't follow or unfollow yourself",
-				success:false
+				message: "You can't follow or unfollow yourself",
+				success: false
 			})
 		}
 
 		const user = await User.findById(personWhoWantsToFollow);
 		const targetUser = await User.findById(ToBeFollowed);
-		if(!user || !targetUser){
+		if (!user || !targetUser) {
 			return res.status(400).json({
-				message:"User not found",
-				success:false
+				message: "User not found",
+				success: false
 			})
 		}
 		// follow or unfollow
 		const isFollowing = user.following.includes(ToBeFollowed);
-		if(isFollowing){
+		if (isFollowing) {
 			//unfollow
 			await Promise.all([
-				User.updateOne({_id:personWhoWantsToFollow},{$pull:{following:ToBeFollowed}}),
-				User.updateOne({_id:ToBeFollowed},{$pull:{followers:personWhoWantsToFollow}}),
+				User.updateOne({ _id: personWhoWantsToFollow }, { $pull: { following: ToBeFollowed } }),
+				User.updateOne({ _id: ToBeFollowed }, { $pull: { followers: personWhoWantsToFollow } }),
 			])
 			return res.status(200).json({
-				message:"Unfollowed successfully",
-				success:true
+				message: "Unfollowed successfully",
+				success: true
 			})
 		}
-		else{
+		else {
 			// follow
 			await Promise.all([
-				User.updateOne({_id:personWhoWantsToFollow},{$push:{following:ToBeFollowed}}),
-				User.updateOne({_id:ToBeFollowed},{$push:{followers:personWhoWantsToFollow}}),
+				User.updateOne({ _id: personWhoWantsToFollow }, { $push: { following: ToBeFollowed } }),
+				User.updateOne({ _id: ToBeFollowed }, { $push: { followers: personWhoWantsToFollow } }),
 			])
 			return res.status(200).json({
-				message:"followed successfully",
-				success:true
+				message: "followed successfully",
+				success: true
 			})
 		}
-	} 
+	}
 	catch (error) {
 		console.log(error);
 	}
