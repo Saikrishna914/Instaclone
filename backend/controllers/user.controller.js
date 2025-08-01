@@ -88,16 +88,16 @@ export const login = async (req, res) => {
 		};
 
 		return res.cookie("token", token, {
-				httpOnly: true,
-				secure: process.env.NODE_ENV === "production", // HTTPS only in production
-				sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-				maxAge: 24 * 60 * 60 * 1000, // 1 day
-			})
-			.json({
-				message: `Welcome back ${user.username}`,
-				success: true,
-				user,
-			});
+			httpOnly: true,
+			secure: true,       // HTTPS only
+			sameSite: "none",   // allow cross-site
+			maxAge: 24 * 60 * 60 * 1000,
+		})
+		.json({
+			message: `Welcome back ${user.username}`,
+			success: true,
+			user,
+		});
 	} catch (error) {
 		console.log(error);
 	}
