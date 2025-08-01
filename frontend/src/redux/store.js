@@ -21,7 +21,6 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    blacklist: ['socketio'] ,
 }
 
 const rootReducer = combineReducers({
