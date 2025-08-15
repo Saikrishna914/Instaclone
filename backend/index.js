@@ -21,6 +21,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 
+// ✅ 1) Trust proxy so 'secure' cookies are accepted behind Render/Heroku
+app.set('trust proxy', 1);
+
 app.use(cors ({
     origin:process.env.FRONTEND_URI,
     credentials:true
