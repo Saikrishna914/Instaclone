@@ -62,8 +62,11 @@ const Signup = () => {
 		<div className='flex items-center w-screen h-screen justify-center'>
 		<form onSubmit ={signupHandler} className='shadow-lg flex flex-col gap-5 p-8'>
 			<div className='my-4'>
+			<div className='w-full flex justify-center items-center'>
+                <img src='../../Connectify.svg' className='w-[5rem]'/>
+            </div>
 			<h1 className='text-center font-bold text-xl'>LOGO</h1>
-			<p className='text-sm text-center'>
+			<p className='italic font-extralight text-sm text-center'>
 				Signup to see photos & videos from your friends
 			</p>
 			</div>

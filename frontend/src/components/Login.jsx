@@ -63,8 +63,10 @@ const Login = () => {
         <div className='flex items-center w-screen h-screen justify-center'>
         <form onSubmit ={LoginHandler} className='shadow-lg flex flex-col gap-5 p-8'>
             <div className='my-4'>
-            <h1 className='text-center font-bold text-xl'>LOGO</h1>
-            <p className='text-sm text-center'>
+            <div className='w-full flex justify-center items-center'>
+                <img src='../../Connectify.svg' className='w-[5rem]'/>
+            </div>
+            <p className='italic font-extralight text-sm text-center'>
                 Login to see photos & videos from your friends
             </p>
             </div>
@@ -90,7 +92,7 @@ const Login = () => {
             </div>
             {
                 loading ? (
-                    <Button>
+                    <Button >
                         <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                         Please wait
                     </Button>

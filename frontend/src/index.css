@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@layer utilities {
+    /* Target autofilled inputs in WebKit browsers (Chrome, Safari, Edge) */
+    input:-webkit-autofill,
+    input:-webkit-autofill:focus {
+        transition: background-color 600000s 0s, color 600000s 0s;
+    }
+
+    /* Target custom attribute for autofilled inputs */
+    input[data-autocompleted] {
+        background-color: transparent !important;
+    }
+}
+
+:root {
+    background-color: white;
+  color: black;
+}
